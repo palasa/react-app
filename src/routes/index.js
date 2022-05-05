@@ -4,36 +4,35 @@ import {
   NotFound,
   Settings,
   ArticleList,
-  ArticleEdit
+  ArticleEdit,
 } from '../views'
 
 export const mainRouter = [
   {
     path: '/login',
-    element: Login
+    element: Login,
   },
   {
     path: '/404',
-    element: NotFound
+    element: NotFound,
   },
-
 ]
 
 export const adminRouter = [
   {
     path: '/dashboard',
-    element: Dashboard
+    element: Dashboard,
   },
   {
     path: '/settings',
-    element: Settings
+    element: Settings,
   },
   {
     path: '/article',
-    element: ArticleList
+    element: ArticleList,
   },
   {
     path: '/article/edit/:id',
-    element: ArticleEdit
-  }
+    element: ArticleEdit,
+  },
 ]

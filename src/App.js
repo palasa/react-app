@@ -1,30 +1,19 @@
-import './App.less'
-import { Button } from 'antd'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import { Component } from 'react'
+import { adminRouter } from './routes'
 
-const testHOC = WrapperComponent => {
-  return class HocComponent extends Component {
-    render() {
-      return (
-        <>
-          <WrapperComponent />
-          <div>这是HOC中的信息</div>
-        </>
-      )
-    }
-  }
-}
-
-@testHOC
 export default class App extends Component {
   render() {
     return (
       <div>
-        App
-        <Button type="primary">测试按钮</Button>
+        <h1>这里是公共的部分</h1>
+        <Routes>
+          { adminRouter.map( route => <Route key={route.path} path={route.path} element={<route.element/>} />)}
+
+          <Route path='/' element={<Navigate to="/admin/dashboard" replace/>}/>
+          <Route path='/*' element={<Navigate to="/404" replace/>}/>
+        </Routes>
       </div>
     )
   }
 }
-
-// export default testHOC(App)

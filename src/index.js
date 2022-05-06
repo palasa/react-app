@@ -1,20 +1,20 @@
-import { createRoot } from 'react-dom/client'
-import { Routes, HashRouter as Router, Route, Navigate } from 'react-router-dom'
+import  ReactDOM  from 'react-dom'
+import { Routes, HashRouter as Router, Route , Navigate } from 'react-router-dom'
 import { Suspense, lazy } from 'react'
-import { mainRouter } from './routes'
+import { mainRoutes } from './routes'
 import { Loading } from './components'
 import './index.less'
 
 const App = lazy(() => import('./App'))
 
-const root = createRoot(document.getElementById('root'))
-root.render(
+// const root = createRoot(document.getElementById('root'))
+ReactDOM.render(
   <Router>
     <Suspense fallback={<Loading />}>
       <Routes>
         <Route path="/admin/*" element={<App />} />
 
-        {mainRouter.map(route => (
+        {mainRoutes.map(route => (
           <Route
             key={route.path}
             path={route.path}
@@ -27,5 +27,6 @@ root.render(
         <Route path="*" element={<Navigate to="/404" replace />} />
       </Routes>
     </Suspense>
-  </Router>
+  </Router>,
+  document.getElementById('root')
 )

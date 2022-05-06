@@ -7,7 +7,14 @@ import {
   ArticleEdit,
 } from '../views'
 
-export const mainRouter = [
+import {
+  DashboardOutlined,
+  ReadOutlined,
+  EditOutlined,
+  UserOutlined,
+} from '@ant-design/icons'
+
+export const mainRoutes = [
   {
     path: '/login',
     element: Login,
@@ -18,21 +25,33 @@ export const mainRouter = [
   },
 ]
 
-export const adminRouter = [
+export const adminRoutes = [
   {
     path: '/dashboard',
     element: Dashboard,
-  },
-  {
-    path: '/settings',
-    element: Settings,
+    title: '仪表盘',
+    icon: <DashboardOutlined />,
+    isNav: true,
   },
   {
     path: '/article',
     element: ArticleList,
+    title: '文章列表',
+    icon: <ReadOutlined />,
+    isNav: true,
   },
   {
     path: '/article/edit/:id',
     element: ArticleEdit,
+    title: '文章管理',
+    icon: <EditOutlined />,
+    isNav: true,
+  },
+  {
+    path: '/settings',
+    element: Settings,
+    icon: <UserOutlined />,
+    title: '设置',
+    isNav: true,
   },
 ]

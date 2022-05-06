@@ -9,16 +9,15 @@
     "@testing-library/user-event": "^13.5.0",
     "antd": "^4.20.2",
     "craco-less": "^2.0.0",
-    "customize-cra": "^1.0.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-router-dom": "^6.3.0",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "craco start",
-    "rewired": "react-app-rewired start",
+    "old start": "react-scripts start",
     "build": "craco build",
     "test": "craco test",
     "format": "prettier --write ."
@@ -42,8 +41,6 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-decorators": "^7.17.9",
-    "prettier": "^2.6.2",
-    "react-app-rewired": "^2.2.1"
+    "prettier": "^2.6.2"
   }
 }

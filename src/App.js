@@ -1,16 +1,17 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { Component, Suspense } from 'react'
-import { adminRouter } from './routes'
-import { Loading } from './components'
+import { adminRoutes } from './routes'
+import { Loading, Frame } from './components'
 
 export default class App extends Component {
   render() {
     return (
-      <div>
-        <h1>这里是公共的部分</h1>
+      <>
+      <button onClick={()=>{ useNavigate(`/admin/settings`) }}>test button</button>
+      <Frame>
         <Suspense fallback={<Loading />}>
           <Routes>
-            {adminRouter.map(route => (
+            {adminRoutes.map(route => (
               <Route
                 key={route.path}
                 path={route.path}
@@ -25,7 +26,8 @@ export default class App extends Component {
             <Route path="/*" element={<Navigate to="/404" replace />} />
           </Routes>
         </Suspense>
-      </div>
+      </Frame>
+      </>
     )
   }
 }

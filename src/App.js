@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import { Component, Suspense } from 'react'
 import { adminRoutes } from './routes'
 import { Loading, Frame } from './components'
@@ -6,8 +6,6 @@ import { Loading, Frame } from './components'
 export default class App extends Component {
   render() {
     return (
-      <>
-      <button onClick={()=>{ useNavigate(`/admin/settings`) }}>test button</button>
       <Frame>
         <Suspense fallback={<Loading />}>
           <Routes>
@@ -27,7 +25,6 @@ export default class App extends Component {
           </Routes>
         </Suspense>
       </Frame>
-      </>
     )
   }
 }

@@ -1,17 +1,19 @@
-import { useNavigate } from 'react-router-dom'
-import { Layout, Menu, Breadcrumb } from 'antd'
+import { useNavigate, useParams } from 'react-router-dom'
+import { Layout, Menu } from 'antd'
 import { adminRoutes } from '../../routes'
 import logo from './logo.png'
 import './frame.less'
 
 function Frame(props) {
-
   const navigate = useNavigate()
+  const params = useParams()
+  const key = '*'
   const { Header, Content, Footer, Sider } = Layout
 
-  const onMenuItemClick = ({ item, key, keyPath, domEvent }) => {
-    // console.log(item, key, keyPath, domEvent)
+  const onMenuItemClick = ({ key, keyPath, domEvent }) => {
+    // console.log( key, keyPath, domEvent)
     navigate(`/admin${key}`)
+    // console.log(params)
   }
 
   const menuItems = adminRoutes
@@ -27,17 +29,13 @@ function Frame(props) {
       }
     })
 
-  
+  // console.log(menuItems)
 
   return (
-    <Layout>
+    <Layout style={{ minHeight: '100%' }}>
       <Header className="header pr-header">
         <div className="logo pr-logo">
-          <img
-            src={logo}
-            alt="logo"
-            onClick={() => navigate(`/admin/settings`)}
-          />
+          <img src={logo} alt="logo" />
         </div>
       </Header>
       <Content
@@ -45,29 +43,24 @@ function Frame(props) {
           padding: '0 50px',
         }}
       >
-        <Breadcrumb
-          style={{
-            margin: '16px 0',
-          }}
-        >
-          <Breadcrumb.Item>Home</Breadcrumb.Item>
-          <Breadcrumb.Item>List</Breadcrumb.Item>
-          <Breadcrumb.Item>App</Breadcrumb.Item>
-        </Breadcrumb>
         <Layout
           className="site-layout-background"
           style={{
             padding: '24px 0',
           }}
         >
-          <Sider className="site-layout-background" width={200}>
+          <Sider
+            className="site-layout-background"
+            width={200}
+            style={{ height: '500px' }}
+          >
             <Menu
               mode="inline"
-              defaultSelectedKeys={['1']}
               style={{
                 height: '100%',
               }}
               items={menuItems}
+              defaultSelectedKeys={['/' + params[key]]}
             />
           </Sider>
           <Content

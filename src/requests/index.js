@@ -1,0 +1,41 @@
+import axios from 'axios'
+import { message } from 'antd'
+
+const isDev = process.env.NODE_ENV === 'development'
+
+const services = axios.create({
+  baseURL: isDev ? 'http://rap2api.taobao.org/app/mock/302162' : '',
+})
+
+services.interceptors.request.use(
+  config => {
+    config.data = {
+      // authToken: window.localStorage.getItem('authToken'),
+      authToken: 'auth token placeholder',
+      ...config.data,
+    }
+    return config
+  },
+  err => {
+    return Promise.reject(err)
+  }
+)
+
+services.interceptors.response.use(
+  res => {
+    if (res.data.code === 200) {
+      // return res.data
+      return res.data.data
+    } else {
+      // deal with error
+      message.error('获取文章列表错误：' + res.data.errMsg)
+    }
+  },
+  err => {
+    return Promise.reject(err)
+  }
+)
+
+export const getArticles = (offset = 0, limited = 10) => {
+  return services.post('/api/v1/article/list')
+}

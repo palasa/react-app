@@ -1,0 +1,24 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      let names = ['Alice', 'Bob', 'Tiff', 'Bruce', 'Alice']
+
+      let nameNum = names.reduce((pre, cur) => {
+        console.log('pre:', pre, 'cur:', cur)
+        if (cur in pre) {
+          pre[cur]++
+        } else {
+          pre[cur] = 1
+        }
+        return pre
+      }, {})
+      // console.log(nameNum); //{Alice: 2, Bob: 1, Tiff: 1, Bruce: 1}
+    </script>
+  </body>
+</html>

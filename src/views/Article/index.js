@@ -1,6 +1,6 @@
-import { Card, Button, Table, Tag } from 'antd'
+import { Card, Button, Table, Tag, Modal } from 'antd'
 import { useEffect, useState } from 'react'
-import { getArticles } from '../../requests'
+import { deleteArticleById, getArticles } from '../../requests'
 import moment from 'moment'
 import ButtonGroup from 'antd/lib/button/button-group'
 
@@ -19,7 +19,7 @@ const operationColumn = {
   render: (text, record, index) => (
     <ButtonGroup>
       <Button
-        size='small'
+        size="small"
         type="primary"
         onClick={() => {
           console.log(text, index, record)
@@ -27,7 +27,15 @@ const operationColumn = {
       >
         编辑
       </Button>
-      <Button size='small' type="danger">删除</Button>
+      <Button
+        size="small"
+        type="danger"
+        onClick={() => {
+          deleteArticle(record)
+        }}
+      >
+        删除
+      </Button>
     </ButtonGroup>
   ),
 }
@@ -67,30 +75,79 @@ const createColumns = columnKeys => {
   return buildColumns
 }
 
+const exportExcel = () => {
+  // front end send request , back end return a csv file
+  console.log('导出成excel')
+}
+
+const deleteArticle = record => {
+  Modal.confirm({
+    title: record.title,
+    content: '是否确认要删除？',
+    // confirmLoading: true,
+    onOk: async () => {
+      const result = await deleteArticleById(record.id)
+      console.log( result )
+    },
+  })
+}
+
+const editArticle = id => {
+
+}
+
 export default function ArticleList() {
+  let pageSizeChange = false
   const [data, setData] = useState([])
   const [total, setTotal] = useState(0)
   const [columns, setColumns] = useState([])
   const [isLoading, setLoading] = useState(false)
+  const [pagination, setPagination] = useState({
+    offset: 0,
+    limit: 10,
+    pageSize: 10,
+    current: 1,
+  })
+
+  const onPageChange = (page, pageSize) => {
+    setPagination({
+      pageSize: pageSize,
+      limit: pageSize,
+      offset: pageSizeChange ? 0 : (page - 1) * pageSize,
+      current: pageSizeChange ? 1 : page,
+    })
+    pageSizeChange = false
+  }
+
+  // 每页条数发生变化时，跳转到第一页
+  const onShowSizeChange = (current, size) => {
+    setPagination({
+      limit: size,
+      pageSize: size,
+    })
+    pageSizeChange = true
+  }
 
   useEffect(() => {
-    setLoading(true)
-    getArticles().then(res => {
-      setTotal(res.total)
-      const columnKeys = Object.keys(res.list[0])
+    ;(async function () {
+      console.log(pagination)
+      setLoading(true)
+      const { total, list } = await getArticles(
+        pagination.offset,
+        pagination.limit
+      )
+      setTotal(total)
+      const columnKeys = Object.keys(list[0])
       setColumns(createColumns(columnKeys))
-      setData(res.list)
-    }).catch( err => {
-      // deal with err
-    }).finally(() => {
+      setData(list)
       setLoading(false)
-    })
-  }, [])
+    })()
+  }, [pagination])
 
   return (
     <Card
       title="文章列表"
-      extra={<Button>导出excel</Button>}
+      extra={<Button onClick={exportExcel}>导出excel</Button>}
       style={{ width: '100%' }}
     >
       <Table
@@ -98,9 +155,15 @@ export default function ArticleList() {
         columns={columns}
         rowKey={record => record.id}
         pagination={{
-          pageSize: 10,
+          current: pagination.current,
+          pageSize: pagination.pageSize,
           total: total,
           hideOnSinglePage: true,
+          showQuickJumper: true,
+          showSizeChanger: true,
+          pageSizeOptions: ['10', '20', '50', '100'],
+          onChange: onPageChange,
+          onShowSizeChange: onShowSizeChange,
         }}
         loading={isLoading}
       />

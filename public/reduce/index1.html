@@ -1,0 +1,28 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      var rabbits = n =>
+        new Array(n)
+          .fill(0)
+          .reduce(prev => [prev[1], prev[0] + prev[1]], [0, 1])[0]
+      console.log(rabbits(10))
+
+      // var arr = []
+      var rab = n =>
+        new Array(n).fill(0).reduce(
+          prev => {
+            prev.push(prev[prev.length - 2] + prev[prev.length - 1])
+            return prev
+          },
+          [1, 1]
+        )
+      console.log(rab(10))
+    </script>
+  </body>
+</html>

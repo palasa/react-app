@@ -36,6 +36,36 @@ services.interceptors.response.use(
   }
 )
 
-export const getArticles = (offset = 0, limited = 10) => {
-  return services.post('/api/v1/article/list')
+/**
+ * 获取文章列表的方法
+ * @param {number} offset
+ * @param {number} limited
+ * @returns
+ */
+export const getArticles = async (offset = 0, limited = 10) => {
+  await delay(0.5)
+  return await services.post('/api/v1/article/list', {
+    offset: offset,
+    limited: limited,
+  })
+}
+
+/**
+ * 删除文章的方法
+ * @param {string} id 要删除的文章编号
+ * @returns object
+ */
+export const deleteArticleById = async id => {
+  await delay(1)
+  return services.post('/api/v1/article/delete/' + id, {
+    id,
+  })
+}
+
+async function delay(seconds=1000) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve()
+    }, seconds * 1000)
+  })
 }

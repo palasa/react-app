@@ -62,7 +62,7 @@ export const deleteArticleById = async id => {
   })
 }
 
-async function delay(seconds=1000) {
+async function delay(seconds = 1000) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       resolve()

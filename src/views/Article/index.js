@@ -1,8 +1,9 @@
-import { Card, Button, Table, Tag, Modal } from 'antd'
+import { Card, Button, Table, Tag, Modal, message } from 'antd'
 import { useEffect, useState } from 'react'
 import { deleteArticleById, getArticles } from '../../requests'
 import moment from 'moment'
 import ButtonGroup from 'antd/lib/button/button-group'
+import { useNavigate } from 'react-router-dom'
 
 const titleMap = {
   id: '编号',
@@ -12,92 +13,14 @@ const titleMap = {
   createAt: '创建时间',
 }
 
-const operationColumn = {
-  title: '操作',
-  dataIndex: 'operation',
-  key: 'operation',
-  render: (text, record, index) => (
-    <ButtonGroup>
-      <Button
-        size="small"
-        type="primary"
-        onClick={() => {
-          console.log(text, index, record)
-        }}
-      >
-        编辑
-      </Button>
-      <Button
-        size="small"
-        type="danger"
-        onClick={() => {
-          deleteArticle(record)
-        }}
-      >
-        删除
-      </Button>
-    </ButtonGroup>
-  ),
-}
-
-const createColumns = columnKeys => {
-  const buildColumns = columnKeys.map(key => {
-    if (key === 'readAmount') {
-      return {
-        title: titleMap[key],
-        key: key,
-        dataIndex: key,
-        render: text => {
-          const color = text > 7000 ? 'red' : 'geekblue'
-          return (
-            <Tag key={key} color={color}>
-              {text}
-            </Tag>
-          )
-        },
-      }
-    } else if (key === 'createAt') {
-      return {
-        title: titleMap[key],
-        dataIndex: key,
-        key: key,
-        render: text => moment(text).format('YYYY.MM.DD'),
-      }
-    } else {
-      return {
-        title: titleMap[key],
-        dataIndex: key,
-        key: key,
-      }
-    }
-  })
-  buildColumns.push(operationColumn)
-  return buildColumns
-}
-
 const exportExcel = () => {
   // front end send request , back end return a csv file
-  console.log('导出成excel')
-}
-
-const deleteArticle = record => {
-  Modal.confirm({
-    title: record.title,
-    content: '是否确认要删除？',
-    // confirmLoading: true,
-    onOk: async () => {
-      const result = await deleteArticleById(record.id)
-      console.log( result )
-    },
-  })
-}
-
-const editArticle = id => {
-
+  message.info('导出成excel')
 }
 
 export default function ArticleList() {
   let pageSizeChange = false
+  const navigate = useNavigate()
   const [data, setData] = useState([])
   const [total, setTotal] = useState(0)
   const [columns, setColumns] = useState([])
@@ -108,6 +31,91 @@ export default function ArticleList() {
     pageSize: 10,
     current: 1,
   })
+
+  const operationColumn = {
+    title: '操作',
+    dataIndex: 'operation',
+    key: 'operation',
+    render: (text, record, index) => (
+      <ButtonGroup>
+        <Button
+          size="small"
+          type="primary"
+          onClick={() => {
+            editArticle(record)
+          }}
+        >
+          编辑
+        </Button>
+        <Button
+          size="small"
+          type="danger"
+          onClick={() => {
+            deleteArticle(record)
+          }}
+        >
+          删除
+        </Button>
+      </ButtonGroup>
+    ),
+  }
+
+  const createColumns = columnKeys => {
+    const buildColumns = columnKeys.map(key => {
+      if (key === 'readAmount') {
+        return {
+          title: titleMap[key],
+          key: key,
+          dataIndex: key,
+          render: text => {
+            const color = text > 7000 ? 'red' : 'geekblue'
+            return (
+              <Tag key={key} color={color}>
+                {text}
+              </Tag>
+            )
+          },
+        }
+      } else if (key === 'createAt') {
+        return {
+          title: titleMap[key],
+          dataIndex: key,
+          key: key,
+          render: text => moment(text).format('YYYY.MM.DD'),
+        }
+      } else {
+        return {
+          title: titleMap[key],
+          dataIndex: key,
+          key: key,
+        }
+      }
+    })
+    buildColumns.push(operationColumn)
+    return buildColumns
+  }
+
+  const deleteArticle = record => {
+    Modal.confirm({
+      title: record.title,
+      content: '是否确认要删除？',
+      // confirmLoading: true,
+      onOk: async () => {
+        const result = await deleteArticleById(record.id)
+        message.success(result.msg)
+        // 回到首页
+        setPagination({
+          current: 1,
+          offset: 0,
+        })
+      },
+    })
+  }
+
+  const editArticle = record => {
+    message.info(record.id)
+    navigate(`/admin/article/edit/${record.id}`, { state: record })
+  }
 
   const onPageChange = (page, pageSize) => {
     setPagination({

@@ -8,6 +8,7 @@ function Frame(props) {
   const navigate = useNavigate()
   const params = useParams()
   const key = '*'
+  const menuSelectedKeys = '/' + params[key].split('/')[0]
   const { Header, Content, Footer, Sider } = Layout
 
   const onMenuItemClick = ({ key, keyPath, domEvent }) => {
@@ -60,7 +61,7 @@ function Frame(props) {
                 height: '100%',
               }}
               items={menuItems}
-              defaultSelectedKeys={['/' + params[key]]}
+              defaultSelectedKeys={[menuSelectedKeys]}
             />
           </Sider>
           <Content

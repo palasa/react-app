@@ -45,7 +45,7 @@ export const adminRoutes = [
     element: ArticleEdit,
     title: '文章管理',
     icon: <EditOutlined />,
-    isNav: true,
+    isNav: false,
   },
   {
     path: '/settings',
